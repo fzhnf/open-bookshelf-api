@@ -38,7 +38,6 @@ model Book {
 model Bookshelf {
   id            String                  @id @default(nanoid())
   name          String
-  owner         String
   userId        String
  
   collaborators Collaboration[]

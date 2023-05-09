@@ -3,7 +3,7 @@ import { nanoid } from "nanoid";
 import InvariantError from "@/backend/errors/InvariantError";
 import AuthenticationError from "@/backend/errors/AuthenticationError";
 import NotFoundError from "@/backend/errors/NotFoundError";
-import prisma from "@/backend/libs/prismadb";
+import prisma from "../libs/prismadb";
 
 
 // const _verifyNewUsername = async (username) => {
