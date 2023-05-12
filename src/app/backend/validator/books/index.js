@@ -1,5 +1,5 @@
-const { bookPayloadSchema } = require('./schema');
-const InvariantError = require('../../error/InvariantError');
+import { bookPayloadSchema } from './schema';
+import InvariantError from '../../error/InvariantError';
 
 const booksValidator = {
   validatebookPayload: (payload) => {

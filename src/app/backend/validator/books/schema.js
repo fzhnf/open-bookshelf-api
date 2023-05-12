@@ -1,4 +1,4 @@
-const Joi = require('joi');
+import  Joi from 'joi';
 
 const bookPayloadSchema = Joi.object({
   title: Joi.string().required(),
