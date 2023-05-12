@@ -89,7 +89,7 @@ model BookshelfBookActivity {
 ```
 
 folder structure:
-``
+```
 └───src
     └───app
         │   favicon.ico
