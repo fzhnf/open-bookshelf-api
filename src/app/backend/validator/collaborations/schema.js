@@ -1,4 +1,4 @@
-const Joi = require('joi');
+import Joi from 'joi';
 
 const CollaborationPayloadSchema = Joi.object({
   bookshelfId: Joi.string().required(),

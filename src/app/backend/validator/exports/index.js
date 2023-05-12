@@ -1,5 +1,5 @@
-const ExportbookshelvesPayloadSchema = require('./schema');
-const InvariantError = require('../../error/InvariantError');
+import ExportbookshelvesPayloadSchema from './schema';
+import InvariantError from '../../error/InvariantError';
 
 const ExportsValidator = {
   validateExportbookshelvesPayload: (payload) => {
@@ -11,4 +11,4 @@ const ExportsValidator = {
   },
 };
 
-module.exports = ExportsValidator;
+export default ExportsValidator;

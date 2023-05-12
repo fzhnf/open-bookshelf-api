@@ -33,4 +33,4 @@ class CacheService {
   }
 }
 
-module.exports = CacheService;
+export default CacheService;

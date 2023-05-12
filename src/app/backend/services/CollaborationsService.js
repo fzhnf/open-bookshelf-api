@@ -1,6 +1,6 @@
-const { Pool } = require('pg');
-const { nanoid } = require('nanoid');
-const InvariantError = require('../error/InvariantError');
+import { Pool } from 'pg';
+import { nanoid } from 'nanoid';
+import InvariantError from'../error/InvariantError';
 
 class CollaborationsService {
   constructor(cacheService) {

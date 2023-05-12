@@ -40,6 +40,6 @@ const activities = (bookshelfId, data) => ({
   activities: data,
 });
 
-module.exports = {
+export default {
   singlebookModel, albumbook, bookshelvesbook, activities,
 };

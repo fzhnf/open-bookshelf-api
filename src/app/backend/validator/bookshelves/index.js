@@ -1,8 +1,8 @@
-const {
+import {
   PostbookshelfPayloadSchema,
   PostbookbookshelfPayloadSchema,
   DeletebookbookshelfPayloadSchema,
-} = require('./schema');
+} from './schema';
 const InvariantError = require('../../error/InvariantError');
 
 const bookshelvesValidator = {

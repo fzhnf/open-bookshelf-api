@@ -1,6 +1,5 @@
 import ExportsHandler from './handler';
-
-const routes = require('./routes');
+import routes from './routes';
 
 module.exports = {
   name: 'exports',

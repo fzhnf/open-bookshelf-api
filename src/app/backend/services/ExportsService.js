@@ -1,5 +1,5 @@
-const amqp = require('amqplib');
-const config = require('../utils/config');
+import amqp from 'amqplib';
+import config from '../utils/config';
 
 const ExportsService = {
   sendMessage: async (queue, message) => {
@@ -17,4 +17,4 @@ const ExportsService = {
   },
 };
 
-module.exports = ExportsService;
+export default ExportsService;

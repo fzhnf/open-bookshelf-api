@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 class StorageService {
   constructor(folder) {
@@ -23,4 +23,4 @@ class StorageService {
   }
 }
 
-module.exports = StorageService;
+export default StorageService;

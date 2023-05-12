@@ -1,9 +1,9 @@
-const { Pool } = require('pg');
-const { nanoid } = require('nanoid');
-const bcrypt = require('bcrypt');
-const InvariantError = require('../error/InvariantError');
-const AuthenticationError = require('../error/AuthenticationError');
-const NotFoundError = require('../error/NotFoundError');
+export { Pool } from 'pg';
+export { nanoid } from 'nanoid';
+export bcrypt = from 'bcrypt';
+export InvariantError = from '../error/InvariantError';
+export AuthenticationError = from '../error/AuthenticationError';
+export NotFoundError = from '../error/NotFoundError';
 
 class UsersService {
   constructor() {
@@ -80,4 +80,4 @@ class UsersService {
   }
 }
 
-module.exports = UsersService;
+export default UsersService;
