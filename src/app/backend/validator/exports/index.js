@@ -1,9 +1,9 @@
-const ExportPlaylistsPayloadSchema = require('./schema');
+const ExportbookshelvesPayloadSchema = require('./schema');
 const InvariantError = require('../../error/InvariantError');
 
 const ExportsValidator = {
-  validateExportPlaylistsPayload: (payload) => {
-    const validationResult = ExportPlaylistsPayloadSchema.validate(payload);
+  validateExportbookshelvesPayload: (payload) => {
+    const validationResult = ExportbookshelvesPayloadSchema.validate(payload);
 
     if (validationResult.error) {
       throw new InvariantError(validationResult.error.message);

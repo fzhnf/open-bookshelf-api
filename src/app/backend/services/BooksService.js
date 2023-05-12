@@ -2,21 +2,21 @@ const { Pool } = require('pg');
 const { nanoid } = require('nanoid');
 const InvariantError = require('../error/InvariantError');
 const NotFoundError = require('../error/NotFoundError');
-const { singleSongModel } = require('../utils');
+const { singlebookModel } = require('../utils');
 
-class SongsService {
+class booksService {
   constructor(cacheService) {
     this._pool = new Pool();
     this._cacheService = cacheService;
   }
 
-  async addSong({
+  async addbook({
     title, year, genre, performer, duration = null, 
   }) {
-    const id = `song-${nanoid(16)}`;
+    const id = `book-${nanoid(16)}`;
 
     const query = {
-      text: 'INSERT INTO songs VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id',
+      text: 'INSERT INTO books VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id',
       values: [id, title, year, genre, performer, duration],
     };
 
@@ -29,9 +29,9 @@ class SongsService {
     return result.rows[0].id;
   }
 
-  async getSongs({ title = '', performer = '' }) {
+  async getbooks({ title = '', performer = '' }) {
     const query = {
-      text: 'SELECT id, title, performer FROM songs WHERE title iLIKE $1 AND performer iLIKE $2',
+      text: 'SELECT id, title, performer FROM books WHERE title iLIKE $1 AND performer iLIKE $2',
       values: [`%${title}%`, `%${performer}%`],
     };
 
@@ -39,16 +39,16 @@ class SongsService {
     return result.rows;
   }
 
-  async getSongById(id) {
+  async getbookById(id) {
     try {
-      const result = await this._cacheService.get(`song:${id}`);
+      const result = await this._cacheService.get(`book:${id}`);
       return {
         dataSource: 'cache',
-        song: JSON.parse(result),
+        book: JSON.parse(result),
       };
     } catch {
       const query = {
-        text: 'SELECT * FROM songs WHERE id = $1',
+        text: 'SELECT * FROM books WHERE id = $1',
         values: [id],
       };
 
@@ -58,22 +58,22 @@ class SongsService {
         throw new NotFoundError('Lagu tidak ditemukan');
       }
 
-      const mappedResult = result.rows.map(singleSongModel)[0];
+      const mappedResult = result.rows.map(singlebookModel)[0];
 
-      await this._cacheService.set(`song:${id}`, JSON.stringify(mappedResult));
+      await this._cacheService.set(`book:${id}`, JSON.stringify(mappedResult));
 
       return {
         dataSource: 'database',
-        song: mappedResult,
+        book: mappedResult,
       };
     }
   }
 
-  async editSongId(id, {
+  async editbookId(id, {
     title, year, genre, performer, duration = null,
   }) {
     const query = {
-      text: 'UPDATE songs SET title = $1, year = $2, genre = $3, performer = $4, duration = $5, album_id = $6 WHERE id = $7 RETURNING id',
+      text: 'UPDATE books SET title = $1, year = $2, genre = $3, performer = $4, duration = $5, id = $6 RETURNING id',
       values: [title, year, genre, performer, duration, id],
     };
 
@@ -83,12 +83,12 @@ class SongsService {
       throw new NotFoundError('Gagal memperbarui lagu. Id tidak ditemukan');
     }
 
-    await this._cacheService.delete(`song:${id}`);
+    await this._cacheService.delete(`book:${id}`);
   }
 
-  async deleteSongById(id) {
+  async deletebookById(id) {
     const query = {
-      text: 'DELETE FROM songs WHERE id = $1 RETURNING id',
+      text: 'DELETE FROM books WHERE id = $1 RETURNING id',
       values: [id],
     };
 
@@ -98,8 +98,8 @@ class SongsService {
       throw new NotFoundError('Lagu gagal dihapus. Id tidak ditemukan');
     }
 
-    await this._cacheService.delete(`song:${id}`);
+    await this._cacheService.delete(`book:${id}`);
   }
 }
 
-module.exports = SongsService;
+module.exports = booksService;

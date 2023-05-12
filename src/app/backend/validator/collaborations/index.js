@@ -11,4 +11,4 @@ const CollaborationsValidator = {
   },
 };
 
-module.exports = CollaborationsValidator;
+export default CollaborationsValidator;

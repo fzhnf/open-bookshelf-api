@@ -1,19 +1,19 @@
-const Joi = require('joi');
+import Joi from('joi');
 
-const PostPlaylistPayloadSchema = Joi.object({
+const PostbookshelfPayloadSchema = Joi.object({
   name: Joi.string().required(),
 });
 
-const PostSongPlaylistPayloadSchema = Joi.object({
-  songId: Joi.string().required(),
+const PostbookbookshelfPayloadSchema = Joi.object({
+  bookId: Joi.string().required(),
 });
 
-const DeleteSongPlaylistPayloadSchema = Joi.object({
-  songId: Joi.string().required(),
+const DeletebookbookshelfPayloadSchema = Joi.object({
+  bookId: Joi.string().required(),
 });
 
-module.exports = {
-  PostPlaylistPayloadSchema,
-  PostSongPlaylistPayloadSchema,
-  DeleteSongPlaylistPayloadSchema,
+export default {
+  PostbookshelfPayloadSchema,
+  PostbookbookshelfPayloadSchema,
+  DeletebookbookshelfPayloadSchema,
 };

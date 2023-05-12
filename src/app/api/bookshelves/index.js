@@ -1,4 +1,4 @@
-import bookshelfHandler from './handler';
+import bookshelvesHandler from './handler';
 import routes from './routes';
 
 module.exports = {

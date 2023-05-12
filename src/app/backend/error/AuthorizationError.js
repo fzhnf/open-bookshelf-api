@@ -7,4 +7,4 @@ class AuthorizationError extends ClientError {
   }
 }
 
-module.exports = AuthorizationError;
+export default AuthorizationError;

@@ -3,25 +3,25 @@ const { nanoid } = require('nanoid');
 const InvariantError = require('../error/InvariantError');
 const NotFoundError = require('../error/NotFoundError');
 const AuthorizationError = require('../error/AuthorizationError');
-const { playlistSong, activities } = require('../utils');
+const { bookshelvebook, activities } = require('../utils');
 
-class PlaylistsService {
+class bookshelvesService {
   constructor(collaborationService, cacheService) {
     this._pool = new Pool();
     this._collaborationService = collaborationService;
     this._cacheService = cacheService;
   }
 
-  async verifyPlaylistOwner(playlistId, userId) {
+  async verifybookshelfOwner(bookshelfId, userId) {
     const query = {
-      text: 'SELECT * FROM playlists WHERE id = $1',
-      values: [playlistId],
+      text: 'SELECT * FROM bookshelves WHERE id = $1',
+      values: [bookshelfId],
     };
 
     const result = await this._pool.query(query);
 
     if (!result.rowCount) {
-      throw new NotFoundError('Playlist tidak ditemukan');
+      throw new NotFoundError('bookshelf tidak ditemukan');
     }
 
     if (result.rows[0].owner !== userId) {
@@ -29,86 +29,86 @@ class PlaylistsService {
     }
   }
 
-  async verifyPlaylistAccess(playlistId, userId) {
+  async verifybookshelfAccess(bookshelfId, userId) {
     try {
-      await this.verifyPlaylistOwner(playlistId, userId);
+      await this.verifybookshelfOwner(bookshelfId, userId);
     } catch (error) {
       if (error instanceof NotFoundError) {
         throw error;
       }
       try {
-        await this._collaborationService.verifyCollaborator(playlistId, userId);
+        await this._collaborationService.verifyCollaborator(bookshelfId, userId);
       } catch {
         throw error;
       }
     }
   }
 
-  async addPlaylist(name, owner) {
-    const id = `playlist-${nanoid(16)}`;
+  async addbookshelf(name, owner) {
+    const id = `bookshelf-${nanoid(16)}`;
 
     const query = {
-      text: 'INSERT INTO playlists VALUES($1, $2, $3) RETURNING id',
+      text: 'INSERT INTO bookshelves VALUES($1, $2, $3) RETURNING id',
       values: [id, name, owner],
     };
 
     const result = await this._pool.query(query);
 
     if (!result.rowCount) {
-      throw new InvariantError('Playlist gagal ditambahkan');
+      throw new InvariantError('bookshelf gagal ditambahkan');
     }
 
-    await this._cacheService.delete(`playlist:${owner}`);
+    await this._cacheService.delete(`bookshelf:${owner}`);
     return result.rows[0].id;
   }
 
-  async getPlaylist(owner) {
+  async getbookshelf(owner) {
     try {
-      const result = await this._cacheService.get(`playlist:${owner}`);
+      const result = await this._cacheService.get(`bookshelf:${owner}`);
       return {
         dataSource: 'cache',
-        playlists: JSON.parse(result),
+        bookshelves: JSON.parse(result),
       };
     } catch {
       const query = {
-        text: `SELECT playlists.id, playlists.name, users.username FROM playlists
-        LEFT JOIN collaborations ON collaborations.playlist_id = playlists.id
-        JOIN users ON users.id = playlists.owner
-        WHERE playlists.owner = $1 OR collaborations.user_id = $1`,
+        text: `SELECT bookshelves.id, bookshelves.name, users.username FROM bookshelves
+        LEFT JOIN collaborations ON collaborations.bookshelf_id = bookshelves.id
+        JOIN users ON users.id = bookshelves.owner
+        WHERE bookshelves.owner = $1 OR collaborations.user_id = $1`,
         values: [owner],
       };
 
       const result = await this._pool.query(query);
-      await this._cacheService.set(`playlist:${owner}`, JSON.stringify(result.rows));
+      await this._cacheService.set(`bookshelf:${owner}`, JSON.stringify(result.rows));
 
       return {
         dataSource: 'database',
-        playlists: result.rows,
+        bookshelves: result.rows,
       };
     }
   }
 
-  async deletePlaylistById(playlistId, owner) {
+  async deletebookshelfById(bookshelfId, owner) {
     const query = {
-      text: 'DELETE FROM playlists WHERE id = $1 RETURNING id',
-      values: [playlistId],
+      text: 'DELETE FROM bookshelves WHERE id = $1 RETURNING id',
+      values: [bookshelfId],
     };
 
     const result = await this._pool.query(query);
 
     if (!result.rowCount) {
-      throw new InvariantError('Playlist gagal dihapus');
+      throw new InvariantError('bookshelf gagal dihapus');
     }
 
-    await this._cacheService.delete(`playlist:${owner}`);
+    await this._cacheService.delete(`bookshelf:${owner}`);
   }
 
-  async addSongToPlaylistById(playlistId, songId) {
-    const id = `playlist_songs-${nanoid(16)}`;
+  async addbookTobookshelfById(bookshelfId, bookId) {
+    const id = `bookshelf_books-${nanoid(16)}`;
 
     const query = {
-      text: 'INSERT INTO playlist_songs values($1, $2, $3) RETURNING id',
-      values: [id, playlistId, songId],
+      text: 'INSERT INTO bookshelf_books values($1, $2, $3) RETURNING id',
+      values: [id, bookshelfId, bookId],
     };
 
     const result = await this._pool.query(query);
@@ -118,46 +118,46 @@ class PlaylistsService {
     }
   }
 
-  async getSongFromPlaylistById(playlistId) {
+  async getbookFrombookshelfById(bookshelfId) {
     const query = {
-      text: `SELECT playlists.id, playlists.name, users.username,
-      songs.id AS song_id, songs.title, songs.performer FROM playlists
-      JOIN playlist_songs ON playlist_songs.playlist_id = playlists.id 
-      JOIN songs ON songs.id = playlist_songs.song_id
-      JOIN users ON users.id = playlists.owner
-      WHERE playlists.id = $1`,
-      values: [playlistId],
+      text: `SELECT bookshelves.id, bookshelves.name, users.username,
+      books.id AS book_id, books.title, books.performer FROM bookshelves
+      JOIN bookshelf_books ON bookshelf_books.bookshelf_id = bookshelves.id 
+      JOIN books ON books.id = bookshelf_books.book_id
+      JOIN users ON users.id = bookshelves.owner
+      WHERE bookshelves.id = $1`,
+      values: [bookshelfId],
     };
 
     const result = await this._pool.query(query);
 
     if (!result.rowCount) {
-      throw new NotFoundError('Playlist Tidak ada');
+      throw new NotFoundError('bookshelf Tidak ada');
     }
 
-    return playlistSong(result.rows);
+    return bookshelvebook(result.rows);
   }
 
-  async deleteSongFromPlaylistById(playlistId, songId) {
+  async deletebookFrombookshelfById(bookshelfId, bookId) {
     const query = {
-      text: 'DELETE FROM playlist_songs WHERE playlist_id = $1 AND song_id = $2 RETURNING id',
-      values: [playlistId, songId],
+      text: 'DELETE FROM bookshelf_books WHERE bookshelf_id = $1 AND book_id = $2 RETURNING id',
+      values: [bookshelfId, bookId],
     };
 
     const result = await this._pool.query(query);
 
     if (!result.rowCount) {
-      throw new NotFoundError('Playlist tidak ditemukan');
+      throw new NotFoundError('bookshelf tidak ditemukan');
     }
   }
 
-  async addActivities(userId, playlistId, songId, action) {
+  async addActivities(userId, bookshelfId, bookId, action) {
     const id = `activities-${nanoid(16)}`;
     const date = new Date().toISOString();
 
     const query = {
-      text: 'INSERT INTO playlist_song_activities VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
-      values: [id, playlistId, songId, userId, action, date],
+      text: 'INSERT INTO bookshelf_book_activities VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
+      values: [id, bookshelfId, bookId, userId, action, date],
     };
 
     const result = await this._pool.query(query);
@@ -167,25 +167,25 @@ class PlaylistsService {
     }
   }
 
-  async getActivities(playlistId) {
+  async getActivities(bookshelfId) {
     const query = {
-      text: `SELECT users.username, songs.title, playlist_song_activities.action, 
-      playlist_song_activities.time FROM playlist_song_activities
-      INNER JOIN songs on songs.id = playlist_song_activities.song_id
-      INNER JOIN users on users.id = playlist_song_activities.user_id
-      WHERE playlist_song_activities.playlist_id = $1
-      ORDER BY playlist_song_activities.time`,
-      values: [playlistId],
+      text: `SELECT users.username, books.title, bookshelf_book_activities.action, 
+      bookshelf_book_activities.time FROM bookshelf_book_activities
+      INNER JOIN books on books.id = bookshelf_book_activities.book_id
+      INNER JOIN users on users.id = bookshelf_book_activities.user_id
+      WHERE bookshelf_book_activities.bookshelf_id = $1
+      ORDER BY bookshelf_book_activities.time`,
+      values: [bookshelfId],
     };
 
     const result = await this._pool.query(query);
 
     if (!result.rowCount) {
-      throw new NotFoundError('Playlist Tidak ada');
+      throw new NotFoundError('bookshelf Tidak ada');
     }
 
-    return activities(playlistId, result.rows);
+    return activities(bookshelfId, result.rows);
   }
 }
 
-module.exports = PlaylistsService;
+module.exports = bookshelvesService;

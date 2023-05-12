@@ -33,4 +33,4 @@ class ExportsHandler {
   }
 }
 
-module.exports = ExportsHandler;
+export default ExportsHandler;

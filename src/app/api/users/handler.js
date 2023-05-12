@@ -25,4 +25,4 @@ class UsersHandler {
   }
 }
 
-module.exports = UsersHandler;
+export default UsersHandler;

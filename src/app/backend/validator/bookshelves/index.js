@@ -1,29 +1,29 @@
 const {
-  PostPlaylistPayloadSchema,
-  PostSongPlaylistPayloadSchema,
-  DeleteSongPlaylistPayloadSchema,
+  PostbookshelfPayloadSchema,
+  PostbookbookshelfPayloadSchema,
+  DeletebookbookshelfPayloadSchema,
 } = require('./schema');
 const InvariantError = require('../../error/InvariantError');
 
-const PlaylistsValidator = {
-  validatePostPlaylistPayload: (payload) => {
-    const validationResult = PostPlaylistPayloadSchema.validate(payload);
+const bookshelvesValidator = {
+  validatePostbookshelfPayload: (payload) => {
+    const validationResult = PostbookshelfPayloadSchema.validate(payload);
     if (validationResult.error) {
       throw new InvariantError(validationResult.error.message);
     }
   },
-  validatePostSongPlaylistPayload: (payload) => {
-    const validationResult = PostSongPlaylistPayloadSchema.validate(payload);
+  validatePostbookbookshelfPayload: (payload) => {
+    const validationResult = PostbookbookshelfPayloadSchema.validate(payload);
     if (validationResult.error) {
       throw new InvariantError(validationResult.error.message);
     }
   },
-  validateDeleteSongPlaylistPayload: (payload) => {
-    const validationResult = DeleteSongPlaylistPayloadSchema.validate(payload);
+  validateDeletebookbookshelfPayload: (payload) => {
+    const validationResult = DeletebookbookshelfPayloadSchema.validate(payload);
     if (validationResult.error) {
       throw new InvariantError(validationResult.error.message);
     }
   },
 };
 
-module.exports = PlaylistsValidator;
+module.exports = bookshelvesValidator;

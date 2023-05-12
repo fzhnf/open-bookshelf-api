@@ -8,10 +8,10 @@ class CollaborationsService {
     this._cacheService = cacheService;
   }
 
-  async verifyNewCollaboration(playlistId, userId) {
+  async verifyNewCollaboration(bookshelfId, userId) {
     const query = {
-      text: 'SELECT * FROM collaborations WHERE playlist_id = $1 AND user_id = $2',
-      values: [playlistId, userId],
+      text: 'SELECT * FROM collaborations WHERE bookshelf_id = $1 AND user_id = $2',
+      values: [bookshelfId, userId],
     };
 
     const result = await this._pool.query(query);
@@ -21,10 +21,10 @@ class CollaborationsService {
     }
   }
 
-  async verifyCollaborator(playlistId, userId) {
+  async verifyCollaborator(bookshelfId, userId) {
     const query = {
-      text: 'SELECT * FROM collaborations WHERE playlist_id = $1 AND user_id = $2',
-      values: [playlistId, userId],
+      text: 'SELECT * FROM collaborations WHERE bookshelf_id = $1 AND user_id = $2',
+      values: [bookshelfId, userId],
     };
 
     const result = await this._pool.query(query);
@@ -34,14 +34,14 @@ class CollaborationsService {
     }
   }
 
-  async addCollaboration(playlistId, userId) {
-    await this.verifyNewCollaboration(playlistId, userId);
+  async addCollaboration(bookshelfId, userId) {
+    await this.verifyNewCollaboration(bookshelfId, userId);
 
     const id = `collab-${nanoid(16)}`;
 
     const query = {
       text: 'INSERT INTO collaborations VALUES($1, $2, $3) RETURNING id',
-      values: [id, playlistId, userId],
+      values: [id, bookshelfId, userId],
     };
 
     const result = await this._pool.query(query);
@@ -50,14 +50,14 @@ class CollaborationsService {
       throw new InvariantError('Collab gagal ditambahkan');
     }
 
-    await this._cacheService.delete(`playlist:${userId}`);
+    await this._cacheService.delete(`bookshelf:${userId}`);
     return result.rows[0].id;
   }
 
-  async deleteCollaboration(playlistId, userId) {
+  async deleteCollaboration(bookshelfId, userId) {
     const query = {
-      text: 'DELETE FROM collaborations WHERE playlist_id = $1 AND user_id = $2 RETURNING id',
-      values: [playlistId, userId],
+      text: 'DELETE FROM collaborations WHERE bookshelf_id = $1 AND user_id = $2 RETURNING id',
+      values: [bookshelfId, userId],
     };
 
     const result = await this._pool.query(query);
@@ -66,7 +66,7 @@ class CollaborationsService {
       throw new InvariantError('Collab gagal dihapus');
     }
 
-    await this._cacheService.delete(`playlist:${userId}`);
+    await this._cacheService.delete(`bookshelf:${userId}`);
   }
 }
 

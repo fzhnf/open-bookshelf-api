@@ -21,25 +21,17 @@ const booksModel = ({
 }) => ({
   id,
   title,
-  performer,
+  author,
 });
 
-const albumbook = (data) => ({
-  id: data[0].album_id,
-  name: data[0].name,
-  year: data[0].year,
-  coverUrl: data[0].cover,
-  books: data[0].id ? data.map(booksModel) : [],
-});
-
-const bookshelvebook = (data) => ({
+const bookshelvesbook = (data) => ({
   id: data[0].id,
   name: data[0].name,
   username: data[0].username,
-  books: data.map(({ book_id, title, performer }) => ({
+  books: data.map(({ book_id, title, author }) => ({
     id: book_id,
     title,
-    performer,
+    author,
   })),
 });
 
@@ -49,5 +41,5 @@ const activities = (bookshelfId, data) => ({
 });
 
 module.exports = {
-  singlebookModel, albumbook, bookshelvebook, activities,
+  singlebookModel, albumbook, bookshelvesbook, activities,
 };

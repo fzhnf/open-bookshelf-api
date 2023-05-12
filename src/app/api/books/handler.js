@@ -71,4 +71,4 @@ class booksHandler {
   }
 }
 
-module.exports = booksHandler;
+export default booksHandler;
