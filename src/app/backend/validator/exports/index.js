@@ -1,5 +1,5 @@
 import ExportbookshelvesPayloadSchema from './schema';
-import InvariantError from '../../error/InvariantError';
+import InvariantError from '../../errors/InvariantError';
 
 const ExportsValidator = {
   validateExportbookshelvesPayload: (payload) => {

@@ -3,7 +3,7 @@ import {
   PostbookbookshelfPayloadSchema,
   DeletebookbookshelfPayloadSchema,
 } from './schema';
-const InvariantError = require('../../error/InvariantError');
+const InvariantError = require('../../errors/InvariantError');
 
 const bookshelvesValidator = {
   validatePostbookshelfPayload: (payload) => {

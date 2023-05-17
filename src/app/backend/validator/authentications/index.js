@@ -3,7 +3,7 @@ import {
   PutAuthenticationPayloadSchema,
   DeleteAuthenticationPayloadSchema,
 } from './schema';
-const InvariantError = require('../../error/InvariantError');
+const InvariantError = require('../../errors/InvariantError');
 
 const AuthenticationsValidator = {
   validatePostAuthenticationPayload: (payload) => {

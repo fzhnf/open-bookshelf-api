@@ -1,5 +1,5 @@
 import { bookPayloadSchema } from './schema';
-import InvariantError from '../../error/InvariantError';
+import InvariantError from '../../errors/InvariantError';
 
 const booksValidator = {
   validatebookPayload: (payload) => {

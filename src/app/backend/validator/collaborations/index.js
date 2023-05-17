@@ -1,4 +1,4 @@
-import InvariantError from '../../error/InvariantError';
+import InvariantError from '../../errors/InvariantError';
 import { CollaborationPayloadSchema } from './schema';
 
 const CollaborationsValidator = {

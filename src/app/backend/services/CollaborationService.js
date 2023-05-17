@@ -1,24 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+import  prisma from '@/backend/libs/prismadb';
 import { nanoid } from 'nanoid';
-import InvariantError from '../error/InvariantError';
-
-const prisma = new PrismaClient();
+import InvariantError from '@/backend/errors/InvariantError';
 
 
-export const verifyNewCollaboration= async (bookshelfId, userId) => {
-  const collaboration = await prisma.collaboration.findUnique({
-    where: {
-      bookshelfId_userId: {
-        bookshelfId,
-        userId,
-      },
-    },
-  });
-
-  if (collaboration) {
-    throw new InvariantError('Collaborator sudah ada!');
-  }
-}
 
 export const verifyCollaborator = async (bookshelfId, userId) => {
   const collaboration = await prisma.collaboration.findUnique({
@@ -71,4 +55,4 @@ export const deleteCollaboration= async (bookshelfId, userId) => {
 }
 
 
-export default CollaborationsService;
+export default CollaborationService;
