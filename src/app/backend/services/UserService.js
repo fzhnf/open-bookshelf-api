@@ -1,10 +1,9 @@
 import bcrypt from "bcrypt";
 import { nanoid } from "nanoid";
-import InvariantError from "@/backend/errors/InvariantError";
-import AuthenticationError from "@/backend/errors/AuthenticationError";
-import NotFoundError from "@/backend/errors/NotFoundError";
-import prisma from "@/backend/libs/prismadb";
-
+import InvariantError from "../errors/InvariantError";
+import AuthenticationError from "../errors/AuthenticationError";
+import NotFoundError from "../errors/NotFoundError"; 
+import Prisma from "../libs/prismadb";
 
 export const _verifyNewUser = async (username, email) => {
   const existingUser = await prisma.user.findFirst({ where: { username }, });

@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@prisma/client": "^4.13.0",
+    "@prisma/client": "^4.14.0",
     "autoprefixer": "10.4.14",
     "bcrypt": "^5.1.0",
     "joi": "^17.9.2",

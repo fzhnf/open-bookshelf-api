@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import AuthenticationError from "@/backend/errors/AuthenticationError";
+import AuthenticationError from "../errors/AuthenticationError";
 
 export const generateToken = (userId) => {
   return jwt.sign(userId, process.env.JWT_SECRET);
