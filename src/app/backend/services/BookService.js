@@ -2,7 +2,8 @@ import { nanoid } from "nanoid";
 import InvariantError from "@/backend/errors/InvariantError";
 import NotFoundError from "@/backend/errors/NotFoundError";
 import AuthorizationError from "@/backend/errors/AuthorizationError";
-import prisma from "@/backend/libs/prismadb";
+
+import prisma from "../libs/prismadb";
 
 const _verifyBookOwner = async ({ bookId, userId }) => {
   const book = await prisma.book.findUnique({

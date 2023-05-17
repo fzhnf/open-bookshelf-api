@@ -6,32 +6,21 @@ import NotFoundError from "@/backend/errors/NotFoundError";
 import prisma from "@/backend/libs/prismadb";
 
 
-const _verifyNewUsername = async (username) => {
-  const existingUser = await prisma.user.findFirst({
-    where: {
-      username
-    },
-  });
-  
+export const _verifyNewUser = async (username, email) => {
+  const existingUser = await prisma.user.findFirst({ where: { username }, });
   if (existingUser) {
     throw new InvariantError("Username sudah digunakan");
   }
-}
-const _verifyNewEmail = async (email) => {
-  const existingEmail = await prisma.email.findFirst({
-    where: {
-      email
-    },
-  });
-
+  
+  const existingEmail = await prisma.email.findFirst({ where: { email }, });
   if (existingEmail) {
-    throw new InvariantError("Email sudah digunakan")
+    throw new InvariantError("Email sudah digunakan");
   }
 }
 
+
 export const addUser = async ({ username, email, password }) => {
-  await _verifyNewUsername(username);
-  await _verifyNewEmail(email);
+  await _verifyNewUser(username, email);
 
   const id = `user-${nanoid(16)}`
   const hashedPassword = await bcrypt.hash(password, 10);
