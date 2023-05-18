@@ -1,36 +1,152 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+npx create-next-app
+npm install prisma jsonwebtoken bcrypt joi nanoid
+npx prisma init
+npx prisma db push
 
-## Getting Started
+git checkout -b "ariqH"
+git checkout -b "fzhnf"
+schema.prisma:
+```
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-First, run the development server:
+generator client {
+  provider = "prisma-client-js"
+}
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String      @id @default(nanoid())
+  username     String      @unique
+  email        String      @unique
+  password     String
+
+  books        Book[]
+  bookshelves  Bookshelf[]
+  Collaboration         Collaboration[]
+  BookshelfBookActivity BookshelfBookActivity[]
+}
+
+model Book {
+  id        Int      @id @default(autoincrement())
+  title     String
+  year      Int
+  author    String
+  user_id   String
+  description           String?
+  
+  bookshelves           BookshelfBook[]
+  BookshelfBookActivity BookshelfBookActivity[]
+  user                  User                    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  }
+
+model Bookshelf {
+  id            String                  @id @default(nanoid())
+  name          String
+  owner         String
+  userId        String
+ 
+  collaborators Collaboration[]
+  books         BookshelfBook[]
+  activities    BookshelfBookActivity[]
+  user          User                    @relation(fields: [userId], references: [id])
+}
+
+model Collaboration {
+  id          String    @id @default(nanoid())
+  bookshelfId String
+  userId      String
+  
+  user        User      @relation(fields: [userId], references: [id])
+  bookshelf   Bookshelf @relation(fields: [bookshelfId], references: [id])
+}
+
+model BookshelfBook {
+  id          String    @id @default(nanoid())
+  bookId      Int 
+  bookshelfId String
+  
+  book        Book      @relation(fields: [bookId], references: [id])
+  bookshelf   Bookshelf @relation(fields: [bookshelfId], references: [id])
+}
+
+model BookshelfBookActivity {
+  id          String    @id @default(nanoid())
+  bookId      Int
+  bookshelfId String
+  userId      String
+  action      String
+  time        DateTime  @default(now())
+
+  user        User      @relation(fields: [userId], references: [id])
+  book        Book      @relation(fields: [bookId], references: [id])
+  bookshelf   Bookshelf @relation(fields: [bookshelfId], references: [id])
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-[http://localhost:3000/api/hello](http://localhost:3000/api/hello) is an endpoint that uses [Route Handlers](https://beta.nextjs.org/docs/routing/route-handlers). This endpoint can be edited in `app/api/hello/route.js`.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+folder structure:
+```
+└───src
+    └───app
+        │   favicon.ico
+        │   globals.css
+        │   layout.js
+        │   page.js
+        │
+        ├───api
+        │   ├───books
+        │   │   │   route.js
+        │   │   │
+        │   │   └───[id]
+        │   │           route.js
+        │   │
+        │   ├───bookshelves
+        │   ├───collaborations
+        │   ├───hello
+        │   │       route.js
+        │   │
+        │   ├───login
+        │   │       route.js
+        │   │
+        │   ├───register
+        │   │       route.js
+        │   │
+        │   └───users
+        │       └───me
+        │               route.js
+        │
+        └───backend
+            ├───errors
+            │       AuthenticationError.js
+            │       AuthorizationError.js
+            │       ClientError.js
+            │       InvariantError.js
+            │       NotFoundError.js
+            │
+            ├───libs
+            │       prismadb.js
+            │
+            ├───services
+            │       bookService.js
+            │       BookShelfService.js
+            │       collaborationService.js
+            │       userService.js
+            │
+            ├───token
+            │       jsonwebtoken.js
+            │
+            ├───utils
+            │       errorHandler.js
+            │       getTokenHandler.js
+            │
+            └───validators
+                    bookshelfValidator.js
+                    bookValidator.js
+                    collaborationValidator.js
+                    loginValidator.js
+                    registerValidator.js
+```

@@ -1,5 +1,4 @@
-import ClientError from "@/backend/errors/ClientError";
-
+import ClientError from "../errors/ClientError";
 const errorHandler = (error) => {
   if (error instanceof ClientError) {
     return {

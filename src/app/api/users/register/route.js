@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import errorHandler from "@/backend/utils/errorHandler";
-import { generateToken } from "@/backend/services/tokenService";
-import { addUser } from "@/backend/services/userService";
-import { validatePostRegisterPayload } from "@/backend/validators/registerValidator";
+import errorHandler from "@/app/backend/utils/errorHandler";
+import { generateToken } from "@/app/backend/token/jsonwebtoken";
+import { addUser } from "@/app/backend/services/userService";
+import { validatePostRegisterPayload } from "@/app/backend/validator/registerValidator";
 
 export async function POST(request) {
   try {

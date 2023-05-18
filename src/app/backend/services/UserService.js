@@ -1,35 +1,11 @@
 import bcrypt from "bcrypt";
 import { nanoid } from "nanoid";
-import InvariantError from "@/backend/errors/InvariantError";
-import AuthenticationError from "@/backend/errors/AuthenticationError";
-import NotFoundError from "@/backend/errors/NotFoundError";
-import prisma from "@/backend/libs/prismadb";
+import InvariantError from "../errors/InvariantError";
+import AuthenticationError from "../errors/AuthenticationError";
+import NotFoundError from "../errors/NotFoundError"; 
+import Prisma from "../libs/prismadb";
 
-
-// const _verifyNewUsername = async (username) => {
-//   const existingUser = await prisma.user.findFirst({
-//     where: {
-//       username
-//     },
-//   });
-  
-//   if (existingUser) {
-//     throw new InvariantError("Username sudah digunakan");
-//   }
-// }
-// const _verifyNewEmail = async (email) => {
-//   const existingEmail = await prisma.email.findFirst({
-//     where: {
-//       email
-//     },
-//   });
-
-//   if (existingEmail) {
-//     throw new InvariantError("Email sudah digunakan")
-//   }
-// }
-
-const _verifyNewUser = async (username, email) => {
+export const _verifyNewUser = async (username, email) => {
   const existingUser = await prisma.user.findFirst({ where: { username }, });
   if (existingUser) {
     throw new InvariantError("Username sudah digunakan");
